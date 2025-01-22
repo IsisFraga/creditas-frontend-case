@@ -1,143 +1,59 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Container, Typography, Box, TextField, Button, Card, CardContent } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { calculateLoan } from '../utils/calculations';
-import { ptBR } from 'date-fns/locale';
-import { formatCurrency } from '@/utils/formatters';
-
-interface FormData {
-  loanAmount: string;
-  months: string;
-  birthDate: Date | null;
-}
-
-interface LoanResult {
-  monthlyPayment: number;
-  totalAmount: number;
-  totalInterest: number;
-  interestRate: number;
-}
+import { useState } from "react";
+import { Typography, Box } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { ptBR } from "date-fns/locale";
+import { LoanForm } from "../components/loan/LoanForm";
+import { LoanResultCard } from "../components/loan/LoanResult";
+import { useLoanCalculator } from "../hooks/useLoanCalculator";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { Card, PageContainer, PageHeader } from "@/components/ui";
+import { LoanFormData } from "@/types/loan.types";
 
 export default function Home() {
-  const [formData, setFormData] = useState<FormData>({
-    loanAmount: '',
-    months: '',
+  const [formData, setFormData] = useState<LoanFormData>({
+    loanAmount: "",
+    months: "",
     birthDate: null,
   });
-  const [result, setResult] = useState<LoanResult | null>(null);
 
-  const handleSimulate = () => {
-    if (!formData.loanAmount || !formData.months || !formData.birthDate) return;
+  const { result, calculate } = useLoanCalculator();
+  const { errors, validateForm, clearError } = useFormValidation();
 
-    const calculatedResult = calculateLoan({
-      amount: Number(formData.loanAmount),
-      months: Number(formData.months),
-      birthDate: formData.birthDate,
-    });
-
-    setResult(calculatedResult);
+  const handleFormChange = (field: keyof LoanFormData, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleSubmit = () => {
+    if (validateForm(formData)) {
+      calculate(formData);
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-      <Container maxWidth="lg">
-        <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h1" gutterBottom align="center">
-            Simulador de Crédito
+      <PageContainer>
+        <PageHeader
+          title="Simulador de Crédito"
+          subtitle="Simule seu empréstimo de forma rápida e fácil"
+        />
+        <Card sx={{ mb: 4 }}>
+          <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+            Insira os dados solicitados
           </Typography>
-          
-          <Box 
-            sx={{ 
-              mt: 4,
-              p: 3, 
-              bgcolor: 'background.paper',
-              borderRadius: 2,
-              boxShadow: 1
-            }}
-          >
-            <Typography variant="h5" gutterBottom>
-              Simule seu empréstimo
-            </Typography>
-            
-            <Box component="form" sx={{ mt: 3 }}>
-              <TextField
-                fullWidth
-                label="Valor do empréstimo"
-                type="number"
-                value={formData.loanAmount}
-                onChange={(e) => setFormData({ ...formData, loanAmount: e.target.value })}
-                InputLabelProps={{ shrink: true }}
-                sx={{ mb: 3 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Prazo (em meses)"
-                type="number"
-                value={formData.months}
-                onChange={(e) => setFormData({ ...formData, months: e.target.value })}
-                InputLabelProps={{ shrink: true }}
-                sx={{ mb: 3 }}
-              />
-              
-              <DatePicker
-                label="Data de Nascimento"
-                value={formData.birthDate}
-                onChange={(newValue) => setFormData({ ...formData, birthDate: newValue })}
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    sx: { mb: 3 }
-                  }
-                }}
-              />
-              
-              <Button 
-                variant="contained" 
-                size="large"
-                fullWidth
-                onClick={handleSimulate}
-                disabled={!formData.loanAmount || !formData.months || !formData.birthDate}
-              >
-                Simular
-              </Button>
-            </Box>
-          </Box>
+          <LoanForm
+            formData={formData}
+            errors={errors}
+            onFormChange={handleFormChange}
+            onSubmit={handleSubmit}
+            clearError={clearError}
+          />
+        </Card>
 
-          {result && (
-            <Card sx={{ mt: 4 }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Resultado da Simulação
-                </Typography>
-                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 3, mt: 2, }}>
-                  <Box>
-                    <Typography color="text.secondary">Valor da Parcela</Typography>
-                    <Typography variant="h5">{formatCurrency(result.monthlyPayment)}</Typography>
-                  </Box>
-                  <Box>
-                    <Typography color="text.secondary">Valor Total</Typography>
-                    <Typography variant="h5">{formatCurrency(result.totalAmount)}</Typography>
-                  </Box>
-                  <Box>
-                    <Typography color="text.secondary">Total de Juros</Typography>
-                    <Typography variant="h5">{formatCurrency(result.totalInterest)}</Typography>
-                  </Box>
-                  <Box>
-                    <Typography color="text.secondary">Taxa de Juros</Typography>
-                    <Typography variant="h5">{(result.interestRate * 100).toFixed(1)}% ao ano</Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          )}
-        </Box>
-      </Container>
+        {result && <LoanResultCard result={result} />}
+      </PageContainer>
     </LocalizationProvider>
   );
 }
