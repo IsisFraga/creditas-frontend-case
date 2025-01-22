@@ -1,28 +1,15 @@
+import { LoanCalculationParams, LoanResult } from '@/types/loan.types';
 import { differenceInYears } from 'date-fns';
 
-export interface LoanParams {
-  amount: number;
-  months: number;
-  birthDate: Date;
-}
-
-export interface LoanResult {
-  monthlyPayment: number;
-  totalAmount: number;
-  totalInterest: number;
-  interestRate: number;
-}
-
-export function getInterestRate(birthDate: Date): number {
+export const getInterestRate = (birthDate: Date): number => {
   const age = differenceInYears(new Date(), birthDate);
-  
-  if (age <= 25) return 0.05;  // 5% ao ano
-  if (age <= 40) return 0.03;  // 3% ao ano
-  if (age <= 60) return 0.02;  // 2% ao ano
-  return 0.04;                 // 4% ao ano
-}
+  if (age <= 25) return 0.05; // 5% ao ano
+  if (age <= 40) return 0.03; // 3% ao ano
+  if (age <= 60) return 0.02; // 2% ao ano
+  return 0.04;                // 4% ao ano
+};
 
-export function calculateLoan({ amount, months, birthDate }: LoanParams): LoanResult {
+export const calculateLoan = ({ amount, months, birthDate }: LoanCalculationParams): LoanResult => {
   const annualRate = getInterestRate(birthDate);
   const monthlyRate = annualRate / 12;
   
@@ -38,4 +25,4 @@ export function calculateLoan({ amount, months, birthDate }: LoanParams): LoanRe
     totalInterest,
     interestRate: annualRate
   };
-}
+};
