@@ -1,4 +1,4 @@
-import { LoanCalculationParams, LoanResult } from '@/types/loan.types';
+import type { LoanCalculationParams, LoanResult } from '@/types/loan.types';
 import { differenceInYears } from 'date-fns';
 
 export const getInterestRate = (birthDate: Date): number => {
