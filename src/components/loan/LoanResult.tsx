@@ -1,7 +1,7 @@
 import { CardContent, Typography, Box, Fade } from '@mui/material';
 import { formatCurrency, formatPercentage } from '@/utils/formatters';
 import { Card } from '@/components/ui';
-import { LoanResult } from '@/types/loan.types';
+import type { LoanResult } from '@/types/loan.types';
 
 interface LoanResultProps {
   result: LoanResult;
@@ -24,7 +24,7 @@ export const LoanResultCard = ({ result }: LoanResultProps) => {
                 sm: 'repeat(2, 1fr)',
                 md: 'repeat(4, 1fr)'
               },
-              gap: 3, 
+              gap: 4, 
               mt: 2 
             }}>
               <ResultItem

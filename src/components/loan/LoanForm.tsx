@@ -1,4 +1,4 @@
-import { FormErrors, LoanFormData } from '@/types/loan.types';
+import type { FormErrors, LoanFormData } from '@/types/loan.types';
 import { TextField, Button, Box, InputAdornment } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
@@ -18,7 +18,7 @@ export const LoanForm = ({
   clearError 
 }: LoanFormProps) => {
   return (
-    <Box component="form" noValidate>
+    <Box component="form" noValidate sx={{height: '100%', display: 'flex', flexDirection:'column', justifyContent: 'space-between'}}>
       <TextField
         fullWidth
         label="Valor do empréstimo"
@@ -32,12 +32,12 @@ export const LoanForm = ({
         }}
         error={!!errors.loanAmount}
         helperText={errors.loanAmount}
-        sx={{ mb: 3 }}
       />
 
       <TextField
         fullWidth
         label="Prazo"
+        type="number"
         value={formData.months}
         onChange={(e) => {
           onFormChange('months', e.target.value);
@@ -48,7 +48,6 @@ export const LoanForm = ({
         }}
         error={!!errors.months}
         helperText={errors.months}
-        sx={{ mb: 3 }}
       />
 
       <DatePicker
@@ -63,7 +62,6 @@ export const LoanForm = ({
             fullWidth: true,
             error: !!errors.birthDate,
             helperText: errors.birthDate,
-            sx: { mb: 3 }
           }
         }}
       />
@@ -73,7 +71,6 @@ export const LoanForm = ({
         size="large"
         fullWidth
         onClick={onSubmit}
-        sx={{ mt: 2 }}
       >
         Calcular
       </Button>
