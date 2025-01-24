@@ -1,58 +1,52 @@
 "use client";
 
-import { useState } from "react";
-import { Typography, Box } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ptBR } from "date-fns/locale";
-import { LoanForm } from "../components/loan/LoanForm";
-import { LoanResultCard } from "../components/loan/LoanResult";
-import { useLoanCalculator } from "../hooks/useLoanCalculator";
-import { useFormValidation } from "../hooks/useFormValidation";
-import { Card, PageContainer, PageHeader } from "@/components/ui";
-import { LoanFormData } from "@/types/loan.types";
+import { PageContainer } from "@/components/ui";
+import { PageGrid } from "@/components/layout/PageGrid";
+import { SplitLayout } from "@/components/layout/SplitLayout";
+import { SimulatorSection } from "@/components/home/SimulatorSection";
+import { IllustrationSection } from "@/components/home/IllustrationSection";
+import { useLoanCalculator } from "@/hooks/useLoanCalculator";
+import { PageTitle } from "@/components/home/PageTitle";
+import { LoanResultCard } from "@/components/loan";
+import { Box } from "@mui/material";
 
-export default function Home() {
-  const [formData, setFormData] = useState<LoanFormData>({
-    loanAmount: "",
-    months: "",
-    birthDate: null,
-  });
-
-  const { result, calculate } = useLoanCalculator();
-  const { errors, validateForm, clearError } = useFormValidation();
-
-  const handleFormChange = (field: keyof LoanFormData, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = () => {
-    if (validateForm(formData)) {
-      calculate(formData);
-    }
-  };
+export default function HomePage() {
+  const {
+    formData,
+    result,
+    handleFormChange,
+    handleSubmit,
+    errors,
+    clearError,
+  } = useLoanCalculator();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
       <PageContainer>
-        <PageHeader
-          title="Simulador de Crédito"
-          subtitle="Simule seu empréstimo de forma rápida e fácil"
-        />
-        <Card sx={{ mb: 4 }}>
-          <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-            Insira os dados solicitados
-          </Typography>
-          <LoanForm
-            formData={formData}
-            errors={errors}
-            onFormChange={handleFormChange}
-            onSubmit={handleSubmit}
-            clearError={clearError}
+        <PageTitle />
+        <PageGrid>
+          <SplitLayout
+            left={<IllustrationSection />}
+            right={
+              <SimulatorSection
+                formData={formData}
+                errors={errors}
+                result={result}
+                onFormChange={handleFormChange}
+                onSubmit={handleSubmit}
+                clearError={clearError}
+              />
+            }
           />
-        </Card>
-
-        {result && <LoanResultCard result={result} />}
+          {result && (
+            <Box sx={{ mt: 4, width: '100%' }}>
+              <LoanResultCard result={result} />
+            </Box>
+          )}
+        </PageGrid>
       </PageContainer>
     </LocalizationProvider>
   );
