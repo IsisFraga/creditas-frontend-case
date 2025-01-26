@@ -8,6 +8,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ptBR } from "date-fns/locale";
 import { theme } from "../styles/theme";
 import { Header } from "@/components/ui/header";
+import { LoanCalculatorProvider } from "@/contexts/LoanCalculator";
 
 export default function RootLayout({
   children,
@@ -23,9 +24,11 @@ export default function RootLayout({
               dateAdapter={AdapterDateFns}
               adapterLocale={ptBR}
             >
-              <CssBaseline />
-              <Header />
-              <main>{children}</main>
+              <LoanCalculatorProvider>
+                <CssBaseline />
+                <Header />
+                <main>{children}</main>
+              </LoanCalculatorProvider>
             </LocalizationProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

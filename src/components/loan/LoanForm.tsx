@@ -1,35 +1,42 @@
-import type { FormErrors, LoanFormData } from '@/types/loan.types';
-import { TextField, Button, Box, InputAdornment } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { TextField, Button, Box, InputAdornment } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { useLoanCalculator } from "@/hooks/useLoanCalculator";
+import { NumericFormat } from "react-number-format";
+import { format, parse } from "date-fns";
 
-interface LoanFormProps {
-  formData: LoanFormData;
-  errors: FormErrors;
-  onFormChange: (field: keyof LoanFormData, value: any) => void;
-  onSubmit: () => void;
-  clearError: (field: keyof FormErrors) => void;
-}
+export const LoanForm: React.FC = () => {
+  const { formData, errors, handleFormChange, handleSubmit, handleClearError } =
+    useLoanCalculator();
+  const parsedBirthDate = formData.birthDate
+    ? parse(formData.birthDate, "dd/MM/yyyy", new Date())
+    : null;
 
-export const LoanForm = ({ 
-  formData, 
-  errors, 
-  onFormChange, 
-  onSubmit,
-  clearError 
-}: LoanFormProps) => {
   return (
-    <Box component="form" noValidate sx={{height: '100%', display: 'flex', flexDirection:'column', justifyContent: 'space-between'}}>
-      <TextField
+    <Box
+      component="form"
+      noValidate
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <NumericFormat
         fullWidth
-        label="Valor do empréstimo"
+        label="Valor do empréstimo (R$)"
         value={formData.loanAmount}
-        onChange={(e) => {
-          onFormChange('loanAmount', e.target.value);
-          clearError('loanAmount');
+        onValueChange={(values) => {
+          handleFormChange("loanAmount", values.value);
+          handleClearError("loanAmount");
         }}
-        InputProps={{
-          startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-        }}
+        customInput={TextField}
+        thousandSeparator="."
+        decimalSeparator=","
+        decimalScale={2}
+        fixedDecimalScale={false}
+        allowNegative={false}
+        prefix="R$ "
         error={!!errors.loanAmount}
         helperText={errors.loanAmount}
       />
@@ -37,11 +44,10 @@ export const LoanForm = ({
       <TextField
         fullWidth
         label="Prazo"
-        type="number"
         value={formData.months}
         onChange={(e) => {
-          onFormChange('months', e.target.value);
-          clearError('months');
+          handleFormChange("months", e.target.value);
+          handleClearError("months");
         }}
         InputProps={{
           endAdornment: <InputAdornment position="end">meses</InputAdornment>,
@@ -52,26 +58,26 @@ export const LoanForm = ({
 
       <DatePicker
         label="Data de Nascimento"
-        value={formData.birthDate}
+        value={parsedBirthDate}
         onChange={(newValue) => {
-          onFormChange('birthDate', newValue);
-          clearError('birthDate');
+          if (newValue) {
+            const formattedDate = format(newValue, "dd/MM/yyyy");
+            handleFormChange("birthDate", formattedDate);
+            handleClearError("birthDate");
+          } else {
+            handleFormChange("birthDate", "");
+          }
         }}
         slotProps={{
           textField: {
             fullWidth: true,
             error: !!errors.birthDate,
             helperText: errors.birthDate,
-          }
+          },
         }}
       />
 
-      <Button
-        variant="contained"
-        size="large"
-        fullWidth
-        onClick={onSubmit}
-      >
+      <Button variant="contained" size="large" fullWidth onClick={handleSubmit}>
         Calcular
       </Button>
     </Box>
