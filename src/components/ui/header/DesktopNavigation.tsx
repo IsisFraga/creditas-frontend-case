@@ -20,7 +20,9 @@ export const DesktopNavigation = ({
         textTransform: 'none',
         minWidth: 'auto',
         px: 3
-      }
+      },
+      top: "8px",
+      position: "relative"
     }}
   >
     {items.map(({ label, path }) => (
