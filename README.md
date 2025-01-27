@@ -26,6 +26,32 @@ npm start        # Servidor de produção
 npm test         # Executa testes
 ```
 
+### Deploy
+O projeto está hospedado na Vercel com CI/CD automático:
+```bash
+
+# Deploy manual (caso necessário)
+
+npm run build
+
+vercel --prod
+
+```
+
+Configurações do projeto na Vercel:
+
+- Framework Preset: Next.js
+
+- Build Command: npm run build
+
+- Output Directory: .next
+
+- Environment Variables: Configuradas via dashboard da Vercel
+
+
+Acesse o projeto aqui > https://creditas-frontend-case-jt0fid2z0-isisfragas-projects.vercel.app/
+
+
 ### Temas
 A aplicação suporta tema claro e escuro, utilizando por padrão o tema do sistema operacional do usuário. Para alternar, basta clicar no ícone de sol ou lua no header.
 
