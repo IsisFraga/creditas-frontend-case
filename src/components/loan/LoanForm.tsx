@@ -25,6 +25,7 @@ export const LoanForm: React.FC = () => {
       <NumericFormat
         fullWidth
         label="Valor do empréstimo (R$)"
+        name="loanAmount"
         value={formData.loanAmount}
         onValueChange={(values) => {
           handleFormChange("loanAmount", values.value);
@@ -44,6 +45,7 @@ export const LoanForm: React.FC = () => {
       <TextField
         fullWidth
         label="Prazo"
+        name="months"
         value={formData.months}
         onChange={(e) => {
           handleFormChange("months", e.target.value);
@@ -58,6 +60,7 @@ export const LoanForm: React.FC = () => {
 
       <DatePicker
         label="Data de Nascimento"
+        name="birthDate"
         value={parsedBirthDate}
         onChange={(newValue) => {
           if (newValue) {
