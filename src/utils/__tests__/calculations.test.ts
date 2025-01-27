@@ -35,14 +35,12 @@ describe('Loan Calculations', () => {
     it('should calculate loan correctly', () => {
       const result = calculateLoan(testLoanParams);
       
-      // Verifica se todos os campos necessários estão presentes
       expect(result).toHaveProperty('monthlyPayment');
       expect(result).toHaveProperty('totalLoanAmount');
       expect(result).toHaveProperty('totalInterest');
       expect(result).toHaveProperty('interestRate');
       expect(result).toHaveProperty('available');
 
-      // Verifica se os valores fazem sentido matematicamente
       expect(result.monthlyPayment).toBeGreaterThan(0);
       expect(result.totalLoanAmount).toBeGreaterThan(Number(testLoanParams.loanAmount));
       expect(result.totalInterest).toBeCloseTo(result.totalLoanAmount - Number(testLoanParams.loanAmount), 2);
@@ -51,7 +49,7 @@ describe('Loan Calculations', () => {
 
     it('should use correct interest rate', () => {
       const result = calculateLoan(testLoanParams);
-      expect(result.interestRate).toBe(0.03); // 3% para idade entre 26-40
+      expect(result.interestRate).toBe(0.03); 
     });
   });
 });
