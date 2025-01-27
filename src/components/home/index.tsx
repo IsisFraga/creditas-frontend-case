@@ -6,9 +6,9 @@ import { SplitLayout } from "@/components/layout/SplitLayout";
 import { SimulatorSection } from "@/components/home/SimulatorSection";
 import { IllustrationSection } from "@/components/home/IllustrationSection";
 import { useLoanCalculator } from "@/hooks/useLoanCalculator";
-import { PageTitle } from "@/components/home/PageTitle";
 import { LoanResultCard } from "@/components/loan";
 import { Box } from "@mui/material";
+import { PageTitle } from "./PageTitle";
 
 export default function Home() {
   const {
