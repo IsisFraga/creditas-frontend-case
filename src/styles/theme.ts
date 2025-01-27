@@ -1,6 +1,6 @@
 'use client';
 
-import { createTheme } from '@mui/material/styles';
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
@@ -12,24 +12,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#8edb00',
-      light: '#4CAF50',
-      dark: '#1B5E20',
-    },
-    secondary: {
-      main: '#0288D1',
-      light: '#03A9F4',
-      dark: '#01579B',
-    },
-    background: {
-      default: '#F5F5F5',
-      paper: '#FFFFFF',
-    },
-  },
+const baseTheme: Partial<ThemeOptions> = {
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h3: {
@@ -78,4 +61,49 @@ export const theme = createTheme({
       },
     },
   },
-});
+};
+
+const lightTheme: ThemeOptions = {
+  ...baseTheme,
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#8edb00',
+      light: '#4CAF50',
+      dark: '#1B5E20',
+    },
+    secondary: {
+      main: '#0288D1',
+      light: '#03A9F4',
+      dark: '#01579B',
+    },
+    background: {
+      default: '#F5F5F5',
+      paper: '#FFFFFF',
+    },
+  },
+};
+
+const darkTheme: ThemeOptions = {
+  ...baseTheme,
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#8edb00',
+      light: '#a6e633',
+      dark: '#669900',
+    },
+    secondary: {
+      main: '#29B6F6',
+      light: '#4FC3F7',
+      dark: '#0288D1',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1E1E1E',
+    },
+  },
+};
+
+export const getTheme = (mode: 'light' | 'dark') => 
+  createTheme(mode === 'light' ? lightTheme : darkTheme);
