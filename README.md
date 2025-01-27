@@ -98,19 +98,82 @@ function SimuladorEmprestimo() {
 
 ## 3. Estrutura e Arquitetura
 
-### Organização do Projeto
+### Estrutura do Projeto
+
 ```
+
 src/
-├── components/          # Componentes React reutilizáveis
-│   ├── Form/           # Componentes de formulário
-│   └── Results/        # Componentes de exibição de resultados
-├── context/            # Contextos React
-│   ├── LoanCalculator/ # Gerenciamento de estado da simulação
-│   └── ThemeContext/   # Gerenciamento de tema claro/escuro
-├── hooks/              # Hooks customizados
-├── styles/             # Temas e estilos globais
-├── types/              # TypeScript types e interfaces
-└── utils/              # Utilitários e cálculos
+
+├── app/               # Configurações da aplicação Next.js
+
+├── components/        # Componentes React reutilizáveis
+
+├── constants/         # Constantes da aplicação
+
+├── contexts/         # Contextos React
+
+├── hooks/            # Hooks customizados
+
+├── services/         # Serviços da aplicação
+
+│   └── LoanCalculator/
+
+│       └── index.ts
+
+├── styles/           # Estilos e temas
+
+├── types/            # TypeScript types
+
+└── utils/            # Utilitários
+
+    ├── tests/
+
+    ├── analysis.ts
+
+    ├── calculations.ts
+
+    ├── dateValidations.ts
+
+    ├── formatters.ts
+
+    └── validators.ts
+
+Arquivos de Configuração:
+
+├── .gitignore
+
+├── .next/
+
+├── .swc/
+
+├── .vercel/
+
+├── coverage/
+
+├── cypress/
+
+├── cypress.config.ts
+
+├── eslint.config.mjs
+
+├── jest.config.ts
+
+├── jest.setup.ts
+
+├── next-env.d.ts
+
+├── next.config.js
+
+├── package.json
+
+├── package-lock.json
+
+├── postcss.config.mjs
+
+├── README.md
+
+└── tsconfig.json
+
 ```
 
 ### Decisões Arquiteturais
