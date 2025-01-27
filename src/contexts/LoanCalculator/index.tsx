@@ -4,6 +4,7 @@ import { calculateLoan } from '@/utils/calculations';
 import { FormErrors, FormMasking, FormMethods, FormValidations } from '@/types/form.types';
 import { initialState } from './initialState';
 import { isUserAtLeast18YearsOld } from '@/utils/dateValidations';
+import { simulateCalculation } from '@/services/LoanCalculator';
 
 export type LoanCalculatorContextStateType = {
   formData: LoanFormData;
@@ -86,17 +87,18 @@ export const LoanCalculatorProvider: React.FC<LoanCalculatorProviderProps> = ({ 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      calculate();
+      await calculate();
     }
   };
 
-  const calculate: LoanCalculatorContextMethodsType['calculate'] = () => {
-    const calculatedResult = calculateLoan({
-      loanAmount: formData.loanAmount,
-      months: formData.months,
-      birthDate: formData.birthDate!,
-    });
-    setResult(calculatedResult);
+  const calculate: LoanCalculatorContextMethodsType['calculate'] = async () => {
+    try {
+      const calculatedResult = await simulateCalculation(formData);
+
+      setResult(calculatedResult);
+    } catch (e) {
+      return e;
+    }
   };
 
   const handleReset:LoanCalculatorContextMethodsType['handleReset']  = () => {
