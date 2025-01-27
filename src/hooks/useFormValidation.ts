@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { FormErrors, LoanFormData } from '@/types/loan.types';
+import { LoanFormData } from '@/types/loan.types';
+import { FormErrors } from '@/types/form.types';
 import { validateLoanAmount, validateMonths, validateBirthDate } from '@/utils/validators';
 
 export const useFormValidation = () => {
- const [errors, setErrors] = useState<FormErrors>({});
+ const [errors, setErrors] = useState<FormErrors<LoanFormData>>({});
 
  const validateForm = (formData: LoanFormData): boolean => {
-   const newErrors: FormErrors = {
+   const newErrors: FormErrors<LoanFormData> = {
      loanAmount: validateLoanAmount(formData.loanAmount),
      months: validateMonths(formData.months),
-     birthDate: validateBirthDate(formData.birthDate)
+     birthDate: validateBirthDate(formData.birthDate ? new Date(formData.birthDate) : null)
    };
 
    const filteredErrors = Object.fromEntries(
@@ -20,7 +21,7 @@ export const useFormValidation = () => {
    return Object.keys(filteredErrors).length === 0;
  };
 
- const clearError = (field: keyof FormErrors) => {
+ const clearError = (field: keyof FormErrors<LoanFormData>) => {
    setErrors(prev => {
      const { [field]: _, ...rest } = prev;
      return rest;
