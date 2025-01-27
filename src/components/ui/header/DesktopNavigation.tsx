@@ -22,7 +22,7 @@ export const DesktopNavigation = ({
         px: 3
       },
       top: "8px",
-      position: "relative"
+      position: "relative",
     }}
   >
     {items.map(({ label, path }) => (
@@ -30,6 +30,7 @@ export const DesktopNavigation = ({
         key={path}
         label={label}
         value={path}
+        sx={{marginBottom: "8px"}}
       />
     ))}
   </Tabs>

@@ -7,7 +7,7 @@ import { NAVIGATION_ITEMS } from '@/constants/navigation';
 import { Logo } from './Logo';
 import { DesktopNavigation } from './DesktopNavigation';
 import { MobileDrawer } from './MobileDrawer';
-import { useTheme as useCustomTheme } from '@/app/layout-provider';
+import { useTheme as useCustomTheme } from '@/app/providers/'
 import Link from 'next/link';
 
 export const Header = () => {
